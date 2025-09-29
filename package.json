@@ -1,0 +1,26 @@
+{
+  "name": "genai",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@huggingface/hub": "^2.6.6",
+    "@huggingface/inference": "^2.8.1",
+    "@huggingface/mcp-client": "^0.2.3",
+    "@langchain/core": "^0.3.77",
+    "@langchain/google-genai": "^0.2.18",
+    "@langchain/groq": "^0.2.4",
+    "dotenv": "^16.4.5",
+    "express": "^5.1.0",
+    "langchain": "^0.3.34"
+  }
+}
