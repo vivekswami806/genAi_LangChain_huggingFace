@@ -5,7 +5,7 @@ async function geminilangchain() {
         const model = new ChatGoogleGenerativeAI({
             model: "gemini-2.0-flash",
             temperature: 0,
-            maxOutputTokens: 5
+            maxOutputTokens: 1024
           });
           
           let  result = await model.invoke("what is a india");

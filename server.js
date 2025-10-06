@@ -12,11 +12,11 @@ dotenv.config();
 app.use(express.json());
 
 app.listen(4041, async () => {
-  //  await llmModelDemo();
-  //  await geminilangchain();
-  //  await hf_On_server(); 
-  //  await hf_On_server2(); 
-   await groqLlmModel(); 
+   await llmModelDemo();                //  working 
+  //  await geminilangchain();             //  working 
+  //  await hf_On_server();                //  Due to payment Not working
+  //  await hf_On_server2();               //  not working due to version deprecate 
+  //  await groqLlmModel();                //  working 
   //  await chatModelGrok(); 
   console.log("Server is running on 4041");
 }); 
