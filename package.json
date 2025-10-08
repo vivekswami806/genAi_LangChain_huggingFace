@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/genai": "^1.22.0",
     "@google/generative-ai": "^0.24.1",
     "@huggingface/hub": "^2.6.6",
     "@huggingface/inference": "^2.8.1",
