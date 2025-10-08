@@ -1,21 +1,98 @@
 import { GoogleGenAI, createUserContent, createPartFromUri, } from "@google/genai";
 import * as fs from "node:fs";
+import wav from 'wav';
 const ai = new GoogleGenAI({});
 
 async function genAILlm(prompt) {
-  // await forStreming(prompt);
+  await forStreming(prompt);
   // await MultiTurnconversations(prompt);
-  await ImageGeneration(prompt);
+  // await ImageGeneration(prompt);                                // https://ai.google.dev/gemini-api/docs/image-generation
+  // await speechGenerationAI();                                      //https://ai.google.dev/gemini-api/docs/speech-generation
+  // await pdfUnderstanding(prompt);                                      //https://ai.google.dev/gemini-api/docs/speech-generation
+
   // const response = await ai.models.generateContent({
   //   model: "gemini-2.5-flash",
   //   contents: prompt,
   //   config: {
   //     temperature: 0.1,
+  //     thinkingConfig: {
+  //       thinkingBudget: 1024,
+  //       // Turn off thinking:
+  //       // thinkingBudget: 0
+  //       // Turn on dynamic thinking:
+  //       // thinkingBudget: -1
+  //     },
   //   },
   // });
 
   // console.log("SYSTEM genAI:", response.text);
 }
+
+
+async function pdfUnderstanding(prompt){
+  const contents = [
+    { text: prompt},
+    {
+        inlineData: {
+            mimeType: 'application/pdf',
+            data: Buffer.from(fs.readFileSync("C:/Users/Administrator/Desktop/vk/Vivek_kumar_.pdf")).toString("base64")
+        }
+    }
+];
+
+const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: contents
+});
+console.log(response.text);
+}
+
+async function saveWaveFile(
+  filename,
+  pcmData,
+  channels = 1,
+  rate = 24000,
+  sampleWidth = 2,
+) {
+  return new Promise((resolve, reject) => {
+     const writer = new wav.FileWriter(filename, {
+           channels,
+           sampleRate: rate,
+           bitDepth: sampleWidth * 8,
+     });
+
+     writer.on('finish', resolve);
+     writer.on('error', reject);
+
+     writer.write(pcmData);
+     writer.end();
+  });
+}
+
+async function speechGenerationAI() {
+  const ai = new GoogleGenAI({});
+
+  const response = await ai.models.generateContent({
+     model: "gemini-2.5-flash-preview-tts",
+     contents: [{ parts: [{ text: 'Say cheerfully: Ek buzurg Japanese mitti ke kalakar apne chhote se workshop mein baithkar naye glazed chai ke bartan ko pyaar se dekh rahe hain. Unke chehre par gehri lakeerein aur ek pyaari si muskaan hai, jo unke saalon ke tajurbe ko dikhati hai. Dhoop ki halki sunehri roshni unke haathon aur mitti ke bartan par gir rahi hai, jisse poora mahaul shaant aur sukoon bhara lag raha hai. Piche mitti ke bartan aur chak dikh rahe hain. Ye manzar unki kala aur samarpan ka prateek hai — ek sadharan zindagi mein chhupi khoobsurti ka ehsaas.!' }] }],
+     config: {
+           responseModalities: ['AUDIO'],
+           speechConfig: {
+              voiceConfig: {
+                 prebuiltVoiceConfig: { voiceName: 'Kore' },
+              },
+           },
+     },
+  });
+
+  const data = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+  const audioBuffer = Buffer.from(data, 'base64');
+
+  const fileName = 'out.wav';
+  await saveWaveFile(fileName, audioBuffer);
+}
+
+
 async function ImageGeneration() {
   const prompt = "Create a picture of a nano banana dish in a fancy restaurant with a Gemini theme";
 
@@ -68,7 +145,7 @@ async function forStreming(prompt) {
   });
 
   for await (const chunk of response) {
-    console.log("chunk", chunk.text);
+    console.log(chunk.text);
   }
 }
 export default genAILlm;

@@ -9,6 +9,7 @@ import chatModelGrok from './LLMs/chatModelGrok.js';
 import readline from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
 import genAILlm from './LLMs/genAi.js';
+import toolcoolingGenAI from './LLMs/toolCoolingGenAI.js';
 
 dotenv.config();
 
@@ -22,7 +23,8 @@ app.listen(4041, async () => {
   while (true) {
     const prompt = await rl.question('YOU: ');
     // You can call one or more LLM functions here with the prompt
-       await genAILlm(prompt);             // working
+    //  await genAILlm(prompt);             // working
+    await toolcoolingGenAI(prompt);
     // await llmModelDemo(prompt);         // working
     // await geminilangchain(prompt);            // working
     // await hf_On_server();               // Not working - Payment
